@@ -88,6 +88,7 @@ class IndexPath extends Command
      */
     public function handle()
     {
+        clearstatcache();
         $start = microtime(true);
         $path = $this->argument('path');
         $categoryTitle = $this->argument('category');
