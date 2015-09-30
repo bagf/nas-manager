@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\File;
 use App\Category;
 use App\Item;
+use \SplFileInfo;
 
 class IndexPath extends Command
 {
@@ -40,25 +41,10 @@ class IndexPath extends Command
         $files = [];
         
         foreach ($directory as $file) {
-            if ($file->isDot() || !$file->isReadable()) continue;
-            if ($file->isDir()) {
-                $files = $this->indexPath($file->getPathname(), $category);
-                if (count($files) > 0) {
-                    $item = Item::where('path', $file->getRealPath())->get();
-                    if (is_null($item) || !count($item)) {
-                        $item = $category->items()->create([
-                            'title' => $file->getFilename(),
-                            'path' => $file->getRealPath(),
-                        ]);
-                    } else {
-                        $item = $item->first();
-                    }
-                    foreach ($files as $ob) {
-                        $ob->item()->associate($item);
-                        $ob->save();
-                    }
-                }
-            } else if ($file->isFile()) {
+            if ($file->isDot() || !$file->isReadable()) {
+                continue;
+            }
+            if ($file->isFile()) {
                 $node = $file->getInode();
                 if ($node <= 0 || $node == false) continue;
                 $f = File::where('dev', $dev)
@@ -75,9 +61,27 @@ class IndexPath extends Command
                     $f->save();
                 }
                 $files[] = $f;
+            } else if ($file->isDir()) {
+                $this->indexPath($file->getPathname(), $category);
             }
         }
-        return $files;
+        
+        if (count($files) > 0) {
+            $pathFile = new SplFileInfo($path);
+            $item = Item::where('path', $pathFile->getRealPath())->get();
+            if (is_null($item) || !count($item)) {
+                $item = $category->items()->create([
+                    'title' => $pathFile->getFilename(),
+                    'path' => $pathFile->getRealPath(),
+                ]);
+            } else {
+                $item = $item->first();
+            }
+            foreach ($files as $ob) {
+                $ob->item()->associate($item);
+                $ob->save();
+            }
+        }
     }
 
 
