@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Inspire::class,
         \App\Console\Commands\IndexPath::class,
         \App\Console\Commands\IndexSearch::class,
+        \App\Console\Commands\IndexRecheck::class,
     ];
 
     /**

@@ -17,4 +17,11 @@ class File extends Model
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function getFilepath()
+    {
+        if (!is_null($this->item)) {
+            return "{$this->item->path}/{$this->filename}";
+        }
+    }
 }
