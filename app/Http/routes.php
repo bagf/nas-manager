@@ -11,26 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    $useCpuTemp = false;
-    $cpuTemp = 0;
-    if (is_executable('/usr/bin/sensors')) {
-        $command = 'sensors | grep Physical\ id\ 0:';
-        $result = exec($command);
-        $plPos = strpos($result, '+');
-        if ($plPos !== false) {
-            $cpuTemp = substr($result, $plPos);
-            $cePos = strpos($cpuTemp, '°C');
-            if ($cePos === false) {
-                $cePos = strpos($cpuTemp, ' C');
-            }
-            if ($cePos !== false) {
-                $useCpuTemp = true;
-                $cpuTemp = substr($cpuTemp, 0, $cePos+4);
-            }
-        }
-    }
-    return view('welcome')
-        ->with('useCpuTemp', $useCpuTemp)
-        ->with('cpuTemp', $cpuTemp);
-});
+Route::get('/', 'SearchController@index');
