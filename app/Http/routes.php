@@ -17,9 +17,8 @@ Route::get('/', function () {
     if (is_executable('/usr/bin/sensors')) {
         $command = 'sensors | grep Physical\ id\ 0:';
         $result = exec($command);
-        $cePos = strpos($result, '°C');
+        $cePos = strpos($result, ' C');
         $plPos = strpos($result, '+');
-        dd($result, $cePos, $plPos);
         if ($cePos !== false && $plPos !== false) {
             $useCpuTemp = true;
             $cpuTemp = substr($r, $plPos, $cePos);
