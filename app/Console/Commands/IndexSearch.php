@@ -41,32 +41,12 @@ class IndexSearch extends Command
     public function handle()
     {
         $start = microtime(true);
-        $terms = explode(':', $this->argument('term'));
-        
-        if (count($terms) === 2) {
-            $term = $terms[1];
-            $collection = Item::whereHas('category', function($query) use ($terms) {
-                $query->where('name', 'LIKE', "%{$terms[0]}%");
-            })
-                ->where('title', 'LIKE', "%{$term}%")
-                ->get()
-                ->take($this->argument('results'));
-        } else {
-            $term = $terms[0];
-            $collection = Item::with('files')
-                ->where('title', 'LIKE', "%{$term}%")
-                ->get()
-                ->take($this->argument('results'));
-        }
+        $collection = Item::with('files')
+            ->search($this->argument('term'))
+            ->get()
+            ->take($this->argument('results'));
         
         $rows = [];
-        
-        $c = count($collection);
-        if ($c > 0 && $this->argument('results') > 0) {
-            $limit = $this->argument('results') / $c;
-        } else {
-            $limit = 100;
-        }
         
         foreach ($collection as $item) {
             $path = $item->path;
@@ -75,11 +55,8 @@ class IndexSearch extends Command
                 $item->title,
                 $path,
             ];
-            $files = $item->files()
-                ->where('filename', 'LIKE', "%{$term}%")
-                ->get()
-                ->take($limit);
-            foreach ($files as $file) {
+            
+            foreach ($item->files as $file) {
                 $rows[] = [
                     'File',
                     "- {$file->filename}",

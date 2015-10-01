@@ -24,4 +24,9 @@ class File extends Model
             return "{$this->item->path}/{$this->filename}";
         }
     }
+
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('filename', 'LIKE', "%{$term}%");
+    }
 }
