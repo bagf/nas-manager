@@ -12,7 +12,7 @@
     <body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-3" style="margin-top: 5em">
                     <ul class="list-group">
                         <li class="list-group-item">
                             @unless(!$useCpuTemp)
@@ -21,6 +21,10 @@
                             @endunless
                         </li>
                     </ul>
+                </div>
+                <div class="col-lg-1">&nbsp;</div>
+                <div class="col-lg-7" style="margin-top: 1em">
+                    <input type="text" class="form-control input-lg" style="width:100%";
                 </div>
             </div>
         </div>
