@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Category;
 
 class SearchController extends Controller
 {
@@ -60,6 +61,7 @@ class SearchController extends Controller
         return view('welcome')
             ->with('hddUsage', $hdds)
             ->with('useCpuTemp', !is_null($cpuTemp))
-            ->with('cpuTemp', $cpuTemp);
+            ->with('cpuTemp', $cpuTemp)
+            ->with('categories', Category::all());
     }
 }

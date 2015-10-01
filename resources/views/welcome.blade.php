@@ -4,10 +4,10 @@
         <title>Laravel File Search</title>
 
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
 
         <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     </head>
     <body>
         <div class="container-fluid">
@@ -35,11 +35,26 @@
                 </div>
                 <div class="col-lg-1">&nbsp;</div>
                 <div class="col-lg-7" style="margin-top: 1em">
-                    <input type="text" class="form-control input-lg" style="width:100%";
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="js-category">All</span> <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a class="js-change-category" href="#">All</a></li>
+                                <li role="separator" class="divider"></li>
+                                @foreach($categories as $category)
+                                <li><a class="js-change-category" href="#">{{ $category->name }}</a></li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control input-lg" style="width:100%" autofocus="true">
+                    </div>
+                    
                 </div>
             </div>
         </div>
         <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
     </body>
 </html>
