@@ -44,6 +44,7 @@ class SearchController extends Controller
                         'used' => $stat[1],
                         'avail' => $stat[2],
                         'pcent' => $stat[3],
+                        'total' => str_replace('GB', '', $stat[1])+str_replace('GB', '', $stat[2])."GB"
                     ];
                 }
             }

@@ -22,7 +22,7 @@
                         @endunless
                         @foreach ($hddUsage as $stat)
                         <li class="list-group-item">
-                            <span class="badge">{{ $stat['used'] }}/{{ $stat['avail'] }}</span>
+                            <span class="badge">{{ $stat['avail'] }}/{{ $stat['total'] }}</span>
                             <i class="glyphicon glyphicon-hdd"></i> {{ $stat['source'] }}
                             <div class="progress" style="margin-top: 1em">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="{{ str_replace('%', '', $stat['pcent']) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $stat['pcent'] }};">
