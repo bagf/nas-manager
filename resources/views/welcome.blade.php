@@ -42,7 +42,9 @@
                                 <li><a class="js-change-category" href="#">All</a></li>
                                 <li role="separator" class="divider"></li>
                                 @foreach($categories as $category)
-                                <li><a class="js-change-category" href="#">{{ $category->name }}</a></li>
+                                <li>
+                                    <a class="js-change-category" href="#">{{ $category->name }} <span class="badge">{{ $category->items()->count() }}</span></a>
+                                </li>
                                 @endforeach
                             </ul>
                         </div>
