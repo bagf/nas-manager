@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\SearchRequest;
+use App\Item;
 use App\Category;
 
 class SearchController extends Controller
@@ -51,6 +53,48 @@ class SearchController extends Controller
             }
             return $stats;
         }
+    }
+
+    protected function formatBytes($size, $precision = 2)
+    {
+        $base = log($size, 1024);
+        $suffixes = array('', 'k', 'M', 'G', 'T');
+
+        if (!isset($suffixes[$base])) {
+            return $size;
+        }
+        return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+    }
+
+    public function search(SearchRequest $request)
+    {
+        $items = Item::with('files')
+            ->search($request->get('term'))
+            ->get();
+        $list = [];
+        
+        foreach ($items as $item) {
+            $path = $item->path;
+            $size = 0;
+            $files = [];
+            foreach ($item->files as $file) {
+                $size += $file->size;
+                $files[] = [
+                    'file' => $file->filename,
+                    'path' => "{$path}/{$file->filename}",
+                    'size' => $this->formatBytes($file->size),
+                ];
+            }
+            $list[] = [
+                'file' => $item->title,
+                'path' => $path,
+                'id' => $item->id,
+                'size' => $this->formatBytes($size),
+                'files' => $files,
+            ];
+        }
+        
+        return response()->json([ 'files' => $list, 'count' => count($list) ]);
     }
     
     public function index(Request $request)

@@ -12,7 +12,26 @@
     <body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3" style="margin-top: 5em">
+                <div class="col-lg-7 col-lg-offset-4" style="margin-top: 1em;margin-bottom: 1em;">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="js-category">All</span> <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a class="js-change-category" href="#"><span class="js-category-text">All</span></a></li>
+                                <li role="separator" class="divider"></li>
+                                @foreach($categories as $category)
+                                <li>
+                                    <a class="js-change-category" href="#"><span class="js-category-text">{{ $category->name }}</span>&nbsp;<span class="badge">{{ $category->items()->count() }}</span></a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control input-lg js-search-term" style="width:100%" autofocus="true">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
                     <ul class="list-group">
                         @unless(!$useCpuTemp)
                         <li class="list-group-item">
@@ -33,24 +52,19 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="col-lg-1">&nbsp;</div>
-                <div class="col-lg-7" style="margin-top: 1em">
-                    <div class="input-group">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="js-category">All</span> <span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a class="js-change-category" href="#">All</a></li>
-                                <li role="separator" class="divider"></li>
-                                @foreach($categories as $category)
-                                <li>
-                                    <a class="js-change-category" href="#">{{ $category->name }} <span class="badge">{{ $category->items()->count() }}</span></a>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        <input type="text" class="form-control input-lg" style="width:100%" autofocus="true">
-                    </div>
-                    
+                <div class="col-lg-9">
+                    <table class="table table-hover js-search-table" style="display:none;font-size: 17px">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Path</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody class="js-search-results">
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
