@@ -71,14 +71,14 @@ class SearchController extends Controller
         $items = Item::with('files')
             ->search($request->get('term'))
             ->get()
-            ->take(1024);
+            ->take(200);
         $list = [];
         
         foreach ($items as $item) {
             $path = $item->path;
             $size = 0;
             $files = [];
-            foreach ($item->files as $file) {
+            foreach ($item->files()->get()->take(200) as $file) {
                 $size += $file->size;
                 $files[] = [
                     'file' => $file->filename,
