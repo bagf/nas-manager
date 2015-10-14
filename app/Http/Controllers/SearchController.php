@@ -55,43 +55,18 @@ class SearchController extends Controller
         }
     }
 
-    protected function formatBytes($size, $precision = 2)
-    {
-        $base = log($size, 1024);
-        $suffixes = array('', 'k', 'M', 'G', 'T');
-
-        if (!isset($suffixes[$base])) {
-            return $size;
-        }
-        return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
-    }
-
     public function search(SearchRequest $request)
     {
-        $items = Item::with('files')
-            ->search($request->get('term'))
+        $items = Item::search($request->get('term'))
             ->get()
             ->take(200);
         $list = [];
         
         foreach ($items as $item) {
-            $path = $item->path;
-            $size = 0;
-            $files = [];
-            foreach ($item->files()->get()->take(200) as $file) {
-                $size += $file->size;
-                $files[] = [
-                    'file' => $file->filename,
-                    'path' => "{$path}/{$file->filename}",
-                    'size' => $this->formatBytes($file->size),
-                ];
-            }
             $list[] = [
                 'file' => $item->title,
-                'path' => $path,
+                'path' => $item->path,
                 'id' => $item->id,
-                'size' => $this->formatBytes($size),
-                'files' => $files,
             ];
         }
         

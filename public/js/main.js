@@ -1,6 +1,21 @@
 
-function showFiles(id) {
-    $('tr.js-show-files-'+ id).toggle();
+function showFiles(id, item) {
+    var $files = $('tr.js-show-files-'+ id);
+    if ($files.length > 0) {
+        $files.toggle();
+        return null;
+    }
+    
+    $.get('/files?item_id='+id, function (data) {
+        $('.js-item-size [data-id='+id+']').html(data.size);
+        $.each(data.files, function (ix, ob) {
+            var $tr = $('<tr class="js-show-files-'+id+'"></tr>');
+            $tr.append('<td class="info">'+ob.file+'</td>');
+            $tr.append('<td class="info">'+ob.path+'</td>');
+            $tr.append('<td class="info">'+ob.size+'</td>');
+            $(item).after($tr);
+        });
+    }, 'json');
 }
 
 $(document).ready(function(){
@@ -22,40 +37,19 @@ $(document).ready(function(){
             }
             if (val.length <= 0) return null;
             searchActive = true;
-            var wait = 300;
-            var $trs = $('.js-search-results tr');
-            $trs.each(function(ix, ob) {
-                $(ob).delay(wait+(ix*10)).fadeOut('fast', function() {
-                    $(this).remove();
+            var $trs = $('.js-search-results tr').remove();
+            $.post('/search', { term: val }, function (data) {
+                $('.js-search-table:hidden').show();
+                $.each(data.files, function (ix, ob) {
+                    var $tr = $('<tr onclick="showFiles('+ob.id+', this)"></tr>');
+                    $tr.append('<td>'+ob.file+'</td>');
+                    $tr.append('<td>'+ob.path+'</td>');
+                    $tr.append('<td class="js-item-size" data-id="'+ob.id+'"> -- </td>');
+
+                    $('.js-search-results').append($tr);
                 });
-            });
-            setTimeout(function() {
-                $.post('/search', { term: val }, function (data) {
-                    $('.js-search-table:hidden').show();
-                    $.each(data.files, function (ix, ob) {
-                        var $tr = $('<tr onclick="showFiles('+ob.id+')"></tr>');
-                        $tr.append('<td>'+ob.file+'</td>');
-                        $tr.append('<td>'+ob.path+'</td>');
-                        $tr.append('<td>'+ob.size+'</td>');
-                        $tr.hide();
-                        
-                        $('.js-search-results').append($tr);
-                        for (var i in ob.files) {
-                            var file = ob.files[i];
-                            var $trFile = $('<tr class="js-show-files-'+ob.id+'" style="display:none;"></tr>');
-                            $trFile.append('<td class="info">'+file.file+'</td>');
-                            $trFile.append('<td class="info">'+file.path+'</td>');
-                            $trFile.append('<td class="info">'+file.size+'</td>');
-                            $('.js-search-results').append($trFile);
-                        }
-                        
-                        $tr.delay(wait+(ix*10)).fadeIn('fast');
-                    });
-                    setTimeout(function() {
-                        searchActive = false;
-                    }, wait + data.count);
-                }, 'json');
-            }, wait + ($trs.length * 10 ));
+                searchActive = false;
+            }, 'json');
         }
     });
     

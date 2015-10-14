@@ -13,4 +13,5 @@
 
 
 Route::post('/search', 'SearchController@search');
+Route::get('/files', 'ItemController@getFiles');
 Route::get('/', 'SearchController@index');
