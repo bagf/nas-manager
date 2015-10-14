@@ -17,7 +17,7 @@ class CreateFilesTable extends Migration
             $table->integer('dev');
             $table->integer('inode');
             $table->string('filename');
-            $table->integer('size');
+            $table->bigInteger('size')->unsigned();
             $table->integer('item_id')->unsigned()->nullable();
             $table->index(['dev','inode']);
             $table->index('item_id');
