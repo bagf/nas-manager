@@ -46,7 +46,7 @@ class Item extends Model
         }
         
         return $query
-            ->orWhere(function ($query) use ($term) {
+            ->where(function ($query) use ($term) {
                 return $query->whereHas('files', function ($query) use ($term) {
                     return $query->search($term);
                 })
