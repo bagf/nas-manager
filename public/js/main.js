@@ -7,7 +7,7 @@ function showFiles(id, item) {
     }
     
     $.get('/files?item_id='+id, function (data) {
-        $('.js-item-size [data-id='+id+']').html(data.size);
+        $('.js-item-size[data-id='+id+']').html(data.size);
         $.each(data.files, function (ix, ob) {
             var $tr = $('<tr class="js-show-files-'+id+'"></tr>');
             $tr.append('<td class="info">'+ob.file+'</td>');
