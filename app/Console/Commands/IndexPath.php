@@ -34,11 +34,12 @@ class IndexPath extends Command
         parent::__construct();
     }
 
-    public function indexPath($path, Category $category)
+    public function indexPath($path, Category $category, $parent = null)
     {
         $directory = new \DirectoryIterator($path);
         $dev = stat($path)[0];
         $files = [];
+        $directories = [];
         
         foreach ($directory as $file) {
             if ($file->isDot() || !$file->isReadable()) {
@@ -62,24 +63,33 @@ class IndexPath extends Command
                 }
                 $files[] = $f;
             } else if ($file->isDir()) {
-                $this->indexPath($file->getPathname(), $category);
+                $directories[] = $file->getPathname();
             }
         }
         
-        if (count($files) > 0) {
+        if (count($files) > 0 || count($directories) > 0) {
             $pathFile = new SplFileInfo($path);
             $item = Item::where('path', $pathFile->getRealPath())->get();
             if (is_null($item) || !count($item)) {
                 $item = $category->items()->create([
                     'title' => $pathFile->getFilename(),
                     'path' => $pathFile->getRealPath(),
+                    'parent_id' => $parent,
                 ]);
             } else {
                 $item = $item->first();
             }
+            // Files
             foreach ($files as $ob) {
                 $ob->item()->associate($item);
                 $ob->save();
+            }
+            /**
+             * Directories
+             * @todo Improve recursion
+             */
+            foreach ($directories as $dir) {
+                $this->indexPath($dir, $category, $item->id);
             }
         }
     }
