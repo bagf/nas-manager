@@ -13,7 +13,7 @@ class Item extends Model
 
     public function files()
     {
-        return $this->hasMany(File::class);
+        return $this->belongsToMany(File::class);
     }
 
     public function category()

@@ -13,9 +13,9 @@ class File extends Model
         'size',
     ];
     
-    public function item()
+    public function items()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsToMany(Item::class);
     }
 
     public function getFilepath()
