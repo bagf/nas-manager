@@ -15,7 +15,7 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->text('path');
+            $table->text('path')->nullable();
             $table->integer('category_id')->unsigned()->nullable();
             $table->index('category_id');
             $table->timestamps();

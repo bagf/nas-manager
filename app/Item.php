@@ -9,7 +9,6 @@ class Item extends Model
     protected $fillable = [
         'title',
         'path',
-        'parent_id',
     ];
 
     public function files()
@@ -20,16 +19,6 @@ class Item extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function item()
-    {
-        return $this->belongsTo(Item::class, 'parent_id');
-    }
-
-    public function items()
-    {
-        return $this->hasMany(Item::class, 'parent_id');
     }
 
     public function scopeSearch($query, $term)
