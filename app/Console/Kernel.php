@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\Inspire::class,
-        \App\Console\Commands\IndexPath::class,
+        \App\Console\Commands\AddPath::class,
+        \App\Console\Commands\AddItem::class,
         \App\Console\Commands\IndexSearch::class,
         \App\Console\Commands\IndexRecheck::class,
     ];
