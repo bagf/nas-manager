@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use DirectoryIterator;
+use App\Item;
 
 class AddPath extends Command
 {
@@ -40,7 +41,9 @@ class AddPath extends Command
             }
             if ($file->isDir()) {
                 $path = $file->getPathname();
-                $this->call('files:add', compact('path', 'category'));
+                if (!Item::where('path', $path)->count()) {
+                    $this->call('files:add', compact('path', 'category'));
+                }
             }
         }
     }
