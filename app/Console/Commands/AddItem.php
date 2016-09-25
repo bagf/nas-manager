@@ -42,9 +42,18 @@ class AddItem extends Command implements SelfHandling
             return false;
         }
         
-        $item = new Item(compact('path'));
+        $item = new Item;
         
-        $item->title = $this->ask('What should we call this item? (type no to cancel)', basename($path));
+        $name = basename($path);
+        $item->title = $this->ask('Rename this item? (type no to cancel)', $name);
+        
+        if ($item->title !== $name) {
+            $newPath = dirname($path).DIRECTORY_SEPARATOR.$item->title;
+            rename($path, $newPath);
+            $path = $newPath;
+        }
+        
+        $item->path = $path;
         
         $choices = Category::all()->lists('name')->toArray();
         $category = $this->askWithCompletion('Which category?', $choices, $defaultCategory);
