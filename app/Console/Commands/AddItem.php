@@ -45,7 +45,7 @@ class AddItem extends Command implements SelfHandling
         $item = new Item;
         
         $name = basename($path);
-        $item->title = $this->ask('Rename this item? (type no to cancel)', $name);
+        $item->title = $this->ask('Rename this item?', $name);
         
         if ($item->title !== $name) {
             $newPath = dirname($path).DIRECTORY_SEPARATOR.$item->title;
