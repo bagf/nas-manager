@@ -3,12 +3,17 @@
 namespace App\Jobs;
 
 use Illuminate\Contracts\Bus\SelfHandling;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use App\Item;
 use App\File;
 use DirectoryIterator;
 
-class ScanItemFiles extends Job implements SelfHandling
+class ScanItemFiles extends Job implements ShouldQueue, SelfHandling
 {
+    use InteractsWithQueue, SerializesModels;
+    
     protected $item;
     protected $path;
     /**
