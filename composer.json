@@ -1,6 +1,6 @@
 {
-    "name": "bagf/laravel-file-search",
-    "description": "Small commands that index directories and query compiled databases",
+    "name": "bagf/nas-manager",
+    "description": "Entities can to be added to a searchable database and files attached from any local file system / HTTP NAS UI",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
